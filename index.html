@@ -1,82 +1,1232 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سيرة ذاتية - عماد الغامدي</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        h1, h2 { color: #2c3e50; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        p { margin-bottom: 15px; }
-        a { color: #3498db; text-decoration: none; font-weight: bold; }
-        
-        /* قسم الشهادات */
-        .certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 20px; }
-        .cert-item { text-align: center; }
-        .cert-item img { width: 100%; height: auto; border-radius: 5px; transition: transform 0.3s; margin-bottom: 10px; }
-        .cert-item img:hover { transform: scale(1.03); }
+  <meta charset="UTF-8" />
+  <title>عماد الغامدي | Web Developer Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-main: #050816;
+      --bg-alt: #0b1020;
+      --accent-1: #6366f1;
+      --accent-2: #ec4899;
+      --accent-3: #22c55e;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(15, 23, 42, 0.9);
+      --border-subtle: rgba(148, 163, 184, 0.3);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.85);
+      --shadow-chip: 0 10px 25px rgba(15, 23, 42, 0.7);
+      --transition-fast: 0.2s ease-out;
+      --transition-med: 0.35s ease-out;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --max-width: 1100px;
+      --section-padding: 80px;
+      --gap-lg: 32px;
+      --gap-md: 20px;
+      --gap-sm: 12px;
+    }
 
-        /* المشاريع والخدمات */
-        .list { margin-bottom: 20px; }
-        footer { margin-top: 40px; text-align: center; font-size: 0.9em; color: #777; border-top: 1px solid #eee; padding-top: 20px; }
-        
-        @media (max-width: 600px) { .container { padding: 20px; } }
-    </style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top left, #1e293b 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      scroll-behavior: smooth;
+    }
+
+    .page {
+      width: 100%;
+      max-width: var(--max-width);
+      padding: 20px 18px 60px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: conic-gradient(from 160deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b1020;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: var(--shadow-chip);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-chip);
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #0b1020;
+      font-weight: 600;
+      transform: translateY(-1px);
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: var(--section-padding);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: var(--gap-lg);
+      align-items: center;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.6));
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(10px);
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent-2), var(--accent-1));
+    }
+
+    .hero-title {
+      font-size: clamp(26px, 4vw, 34px);
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 13px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background var(--transition-med), transform var(--transition-fast), box-shadow var(--transition-med), border-color var(--transition-med), color var(--transition-med);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #0b1020;
+      font-weight: 600;
+      box-shadow: var(--shadow-chip);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(79, 70, 229, 0.6);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 1);
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--accent-3);
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top, rgba(79, 70, 229, 0.35), transparent 55%), radial-gradient(circle at bottom, rgba(236, 72, 153, 0.35), transparent 55%), var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+      min-height: 230px;
+    }
+
+    .hero-card-tag {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-card-orbit {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .hero-card-orbit::before,
+    .hero-card-orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      border: 1px dashed rgba(148, 163, 184, 0.4);
+    }
+
+    .hero-card-orbit::before {
+      width: 140%;
+      height: 140%;
+      top: -20%;
+      left: -20%;
+      transform: rotate(18deg);
+    }
+
+    .hero-card-orbit::after {
+      width: 120%;
+      height: 120%;
+      top: -10%;
+      left: -10%;
+      transform: rotate(-12deg);
+    }
+
+    .hero-card-main {
+      position: relative;
+      z-index: 1;
+      margin-top: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero-name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .hero-role {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .hero-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+    }
+
+    .hero-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .hero-card-footer a {
+      color: var(--accent-1);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hero-card-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .section {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 22px 18px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: var(--gap-md);
+    }
+
+    .section-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .section-list strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .timeline-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: radial-gradient(circle, var(--accent-2), var(--accent-1));
+      margin-top: 4px;
+    }
+
+    .timeline-content-title {
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 2px;
+    }
+
+    .timeline-content-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.25), transparent 55%), rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      padding: 12px 12px 13px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .card-link {
+      font-size: 11px;
+      color: var(--accent-1);
+      text-decoration: none;
+      margin-top: 2px;
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    .service-card {
+      border-radius: var(--radius-md);
+      background: rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      padding: 12px 12px 13px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .service-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      align-self: flex-start;
+      color: var(--text-muted);
+    }
+
+    .service-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: var(--gap-md);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .contact-label {
+      font-size: 12px;
+      color: var(--text-main);
+      min-width: 60px;
+    }
+
+    .contact-value a {
+      color: var(--accent-1);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .contact-value a:hover {
+      text-decoration: underline;
+    }
+
+    .contact-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .contact-cta {
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top, rgba(79, 70, 229, 0.35), transparent 55%), rgba(15, 23, 42, 0.98);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      padding: 12px 12px 13px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-cta-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .contact-cta-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .contact-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    footer {
+      margin-top: 26px;
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    footer a {
+      color: var(--accent-1);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Language handling */
+    [data-lang="ar"] .en-only {
+      display: none !important;
+    }
+
+    [data-lang="en"] {
+      direction: ltr;
+    }
+
+    [data-lang="en"] .ar-only {
+      display: none !important;
+    }
+
+    [data-lang="en"] body,
+    [data-lang="en"] .page {
+      font-family: var(--font-main);
+    }
+
+    [data-lang="en"] .hero,
+    [data-lang="en"] .section-grid,
+    [data-lang="en"] .contact-grid {
+      direction: ltr;
+    }
+
+    [data-lang="en"] .hero-card-tag {
+      left: auto;
+      right: 16px;
+    }
+
+    [data-lang="en"] .hero-card-footer {
+      flex-direction: row-reverse;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        gap: 40px;
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-card {
+        order: -1;
+      }
+
+      .section-grid,
+      .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .page {
+        padding-inline: 14px;
+      }
+
+      .section {
+        padding-inline: 14px;
+      }
+
+      .hero-title {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
-<body>
-
-<div class="container">
+<body data-lang="ar">
+  <div class="page">
     <header>
-        <h1>عماد الغامدي</h1>
-        <p><strong>مطور ويب | مهتم بالأمن السيبراني</strong></p>
+      <div class="brand">
+        <div class="brand-logo">E</div>
+        <div class="brand-text">
+          <div class="brand-title ar-only">ملف تقني شخصي</div>
+          <div class="brand-sub ar-only">تطوير ويب · أمن سيبراني · حلول ذكية</div>
+
+          <div class="brand-title en-only">Tech Personal Profile</div>
+          <div class="brand-sub en-only">Web Development · Cybersecurity · Smart Solutions</div>
+        </div>
+      </div>
+
+      <div class="lang-toggle">
+        <button class="lang-btn active" data-switch="ar">العربية</button>
+        <button class="lang-btn" data-switch="en">English</button>
+      </div>
     </header>
 
-    <section>
-        <h2>عنّي</h2>
-        <p>أنا عماد، مطوّر ويب محترف بخبرة تتجاوز ٢–٣ سنوات. حاصل على شهادات معتمدة في الذكاء الاصطناعي، إنترنت الأشياء، الأمن السيبراني، وتطوير الويب. طالب في الاتحاد السعودي للأمن السيبراني والبرمجة والدرونز. قدّمت دورة بعنوان “برمجة الويب” في عام 1445 هـ.</p>
-        <p>🔗 <a href="https://profile.satr.codes/y50ib/public/overview" target="_blank">ملفي في سطر</a></p>
-    </section>
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-text">
+          <div class="hero-chip-row">
+            <div class="chip ar-only">
+              <span class="chip-dot"></span>
+              ملف شخصي لمطور ويب
+            </div>
+            <div class="chip ar-only">
+              تركيز على الأمن السيبراني والتقنيات الحديثة
+            </div>
 
-    <section>
-        <h2>شهاداتي</h2>
-        <div class="certs-grid">
-            <div class="cert-item"><img src="https://i.postimg.cc/MG2STgJR/IMG-0447.jpg" alt="شهادة"><p>مفاهيم الذكاء الاصطناعي وتطبيقاته المتقدمة</p></div>
-            <div class="cert-item"><img src="https://i.postimg.cc/tTFGWkpY/IMG-0446.jpg" alt="شهادة"><p>مبادئ الذكاء الاصطناعي</p></div>
-            <div class="cert-item"><img src="https://i.postimg.cc/BQpm6nXK/IMG-0449.jpg" alt="شهادة"><p>تطوير تطبيقات الويب</p></div>
-            <div class="cert-item"><img src="https://i.postimg.cc/02nVQybc/IMG-0450.jpg" alt="شهادة"><p>حماية الملكية الفكرية في اختراعات انترنت الاشياء (IOT)</p></div>
-            <div class="cert-item"><img src="https://i.postimg.cc/J4MTMk4z/IMG-0448.jpg" alt="شهادة"><p>مستقبل الترفيه في ظل الذكاء الاصطناعي</p></div>
-            <div class="cert-item"><img src="https://i.postimg.cc/TY0tw3pZ/IMG-0452.jpg" alt="شهادة"><p>الأمن السبراني</p></div>
+            <div class="chip en-only">
+              <span class="chip-dot"></span>
+              Web developer profile
+            </div>
+            <div class="chip en-only">
+              Focused on cybersecurity and emerging tech
+            </div>
+          </div>
+
+          <h1 class="hero-title ar-only">
+            مطور ويب <span>يعرف طريقه في العالم التقني</span>
+          </h1>
+          <h1 class="hero-title en-only">
+            A web developer <span>who understands the tech game</span>
+          </h1>
+
+          <p class="hero-subtitle ar-only">
+            مزيج بين تطوير الواجهات، التفكير الأمني، والتعامل مع التقنيات الذكية. شغف بالحاسب، واهتمام
+            عميق ببناء حلول عملية وآمنة تضيف قيمة حقيقية للمستخدمين.
+          </p>
+          <p class="hero-subtitle en-only">
+            A blend of front‑end development, security‑driven thinking, and smart technologies. Passionate about
+            building practical, secure solutions that deliver real value to users.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn-primary ar-only">
+              تواصل معي
+            </a>
+            <a href="#contact" class="btn-primary en-only">
+              Get in touch
+            </a>
+
+            <a href="#projects" class="btn-ghost ar-only">
+              استعراض المشاريع
+            </a>
+            <a href="#projects" class="btn-ghost en-only">
+              View projects
+            </a>
+          </div>
+
+          <div class="hero-meta ar-only">
+            <span><span class="hero-meta-dot"></span> خبرة عملية في بناء واجهات ويب احترافية</span>
+            <span>توجه تقني واضح نحو الأمن السيبراني</span>
+          </div>
+          <div class="hero-meta en-only">
+            <span><span class="hero-meta-dot"></span> Hands‑on experience in building professional web interfaces</span>
+            <span>Clear technical focus on cybersecurity</span>
+          </div>
         </div>
-    </section>
 
-    <section>
-        <h2>مشاريعي</h2>
-        <p>• <a href="https://serene-hamster-a1075f.netlify.app/" target="_blank">RAVA Store</a></p>
-    </section>
+        <aside class="hero-card">
+          <div class="hero-card-tag ar-only">نظرة سريعة</div>
+          <div class="hero-card-tag en-only">Quick snapshot</div>
 
-    <section>
-        <h2>الخدمات</h2>
-        <div class="list">
-            <p>• تطوير وتصميم مواقع ويب متجاوبة.</p>
-            <p>• استشارات في تقنيات الويب والأمن السيبراني.</p>
-            <p>• تدريب وتقديم دورات في أساسيات البرمجة.</p>
+          <div class="hero-card-orbit"></div>
+
+          <div class="hero-card-main">
+            <div>
+              <div class="hero-name ar-only">عماد الغامدي</div>
+              <div class="hero-name en-only">Emad Alghamdi</div>
+
+              <div class="hero-role ar-only">مطور ويب · مهتم بالأمن السيبراني</div>
+              <div class="hero-role en-only">Web Developer · Cybersecurity‑oriented</div>
+            </div>
+
+            <div class="hero-pill-row">
+              <span class="pill ar-only">تطوير واجهات ويب تفاعلية</span>
+              <span class="pill ar-only">تطبيقات تعتمد على الذكاء الاصطناعي وإنترنت الأشياء</span>
+              <span class="pill ar-only">توجه أمني في تصميم الحلول</span>
+
+              <span class="pill en-only">Interactive web interfaces</span>
+              <span class="pill en-only">AI & IoT‑driven applications</span>
+              <span class="pill en-only">Security‑aware solution design</span>
+            </div>
+
+            <div class="hero-card-footer">
+              <span class="ar-only">ملف تقني موثق بشهادات ومشاريع فعلية</span>
+              <span class="en-only">A technical profile backed by real projects and certifications</span>
+
+              <a href="https://profile.satr.codes/y50ib/public/overview" target="_blank" rel="noopener">
+                Satr Profile
+              </a>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- ABOUT & SKILLS -->
+      <section class="section" id="about">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-title-dot"></span>
+            <span class="ar-only">نبذة تقنية</span>
+            <span class="en-only">Technical overview</span>
+          </div>
+          <div class="section-subtitle ar-only">
+            خلفية تجمع بين التطوير، الأمن، والتقنيات الذكية
+          </div>
+          <div class="section-subtitle en-only">
+            A background that blends development, security, and smart technologies
+          </div>
         </div>
-        <p><strong>للتواصل:</strong></p>
-        <p>رقمي: <a href="tel:+966508922074">+966508922074</a></p>
-        <p>ايميلي: <a href="mailto:ealg.Contact@gmail.com">ealg.Contact@gmail.com</a></p>
-    </section>
+
+        <div class="section-grid">
+          <div class="section-list">
+            <p class="ar-only">
+              مسار مهني مبني على تطوير الويب مع رؤية واضحة تجاه جودة التجربة، الأداء، والأمان. التركيز
+              دائمًا على كتابة كود نظيف، قابل للتطوير، ومهيأ للتكامل مع أنظمة وخدمات مختلفة.
+            </p>
+            <p class="ar-only">
+              الاهتمام بالتقنيات الحديثة مثل الذكاء الاصطناعي وإنترنت الأشياء والدرونز أضاف بعدًا مختلفًا
+              في طريقة التفكير في الحلول، من مجرد واجهة إلى منظومة متكاملة تتعامل مع بيانات وأجهزة وخدمات
+              متعددة.
+            </p>
+
+            <p class="en-only">
+              A career path built around web development with a clear focus on experience quality, performance,
+              and security. The priority is always clean, scalable code that integrates smoothly with different
+              systems and services.
+            </p>
+            <p class="en-only">
+              Interest in modern technologies like AI, IoT, and drones adds a different dimension to solution
+              design—moving from simple interfaces to integrated systems that interact with data, devices, and
+              services.
+            </p>
+
+            <div class="badge-row">
+              <span class="badge ar-only">تفكير تحليلي</span>
+              <span class="badge ar-only">تنفيذ عملي</span>
+              <span class="badge ar-only">اهتمام بالتفاصيل</span>
+
+              <span class="badge en-only">Analytical mindset</span>
+              <span class="badge en-only">Hands‑on execution</span>
+              <span class="badge en-only">Detail‑oriented</span>
+            </div>
+          </div>
+
+          <div class="section-list">
+            <strong class="ar-only">مجالات التركيز:</strong>
+            <strong class="en-only">Focus areas:</strong>
+
+            <ul class="section-list">
+              <li class="ar-only">تطوير واجهات ويب حديثة باستخدام HTML, CSS, وJavaScript.</li>
+              <li class="ar-only">تصميم حلول تراعي مبادئ الأمن السيبراني من البداية.</li>
+              <li class="ar-only">الاستفادة من الذكاء الاصطناعي وإنترنت الأشياء في بناء تجارب تفاعلية.</li>
+              <li class="ar-only">العمل على مشاريع حقيقية موجهة للمستخدم النهائي.</li>
+
+              <li class="en-only">Building modern web interfaces using HTML, CSS, and JavaScript.</li>
+              <li class="en-only">Designing solutions with cybersecurity principles in mind from day one.</li>
+              <li class="en-only">Leveraging AI and IoT to create interactive, smart experiences.</li>
+              <li class="en-only">Working on real‑world, user‑facing projects.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE & CERTS -->
+      <section class="section" id="experience">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-title-dot"></span>
+            <span class="ar-only">الخبرة والشهادات</span>
+            <span class="en-only">Experience & certifications</span>
+          </div>
+          <div class="section-subtitle ar-only">
+            مسار مهني مدعوم بتجربة عملية واعتمادات تقنية
+          </div>
+          <div class="section-subtitle en-only">
+            A professional journey backed by hands‑on work and technical credentials
+          </div>
+        </div>
+
+        <div class="section-grid">
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div>
+                <div class="timeline-content-title ar-only">خبرة عملية في تطوير الويب</div>
+                <div class="timeline-content-title en-only">Practical web development experience</div>
+
+                <div class="timeline-content-meta ar-only">
+                  سنوات من العمل على مشاريع متنوعة في الواجهات وتجربة المستخدم
+                </div>
+                <div class="timeline-content-meta en-only">
+                  Years of working on diverse projects in UI and user experience
+                </div>
+
+                <p class="ar-only">
+                  العمل على مشاريع متعددة ساهم في بناء فهم عميق لدورة حياة تطوير الويب، من الفكرة إلى
+                  الإطلاق، مع مراعاة الأداء، الأمان، وقابلية التطوير المستقبلي.
+                </p>
+                <p class="en-only">
+                  Working across multiple projects helped build a deep understanding of the web development
+                  lifecycle—from idea to launch—while keeping performance, security, and future scalability in
+                  mind.
+                </p>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div>
+                <div class="timeline-content-title ar-only">تجربة في تقديم محتوى تعليمي</div>
+                <div class="timeline-content-title en-only">Experience in delivering training</div>
+
+                <div class="timeline-content-meta ar-only">
+                  دورة متخصصة في برمجة الويب لعدد من المتدربين
+                </div>
+                <div class="timeline-content-meta en-only">
+                  A specialized web programming course delivered to a group of learners
+                </div>
+
+                <p class="ar-only">
+                  تقديم محتوى تدريبي في برمجة الويب عزز القدرة على تبسيط المفاهيم التقنية، وبناء مسار
+                  تعليمي واضح يساعد المتدرب على الانتقال من الأساسيات إلى التطبيق العملي.
+                </p>
+                <p class="en-only">
+                  Delivering web programming training strengthened the ability to simplify technical concepts and
+                  design a clear learning path that moves participants from fundamentals to real implementation.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-list">
+            <strong class="ar-only">اعتمادات تقنية:</strong>
+            <strong class="en-only">Technical credentials:</strong>
+
+            <ul class="section-list">
+              <li class="ar-only">شهادات معتمدة في الذكاء الاصطناعي وتطبيقاته العملية.</li>
+              <li class="ar-only">اعتمادات في إنترنت الأشياء وربط الأنظمة والأجهزة.</li>
+              <li class="ar-only">شهادات في الأمن السيبراني ومفاهيم حماية الأنظمة.</li>
+              <li class="ar-only">شهادات في البرمجة وتطوير البرمجيات.</li>
+              <li class="ar-only">اعتمادات في مجال الدرونز والتقنيات المرتبطة بها.</li>
+
+              <li class="en-only">Certified in artificial intelligence and its practical applications.</li>
+              <li class="en-only">Credentials in Internet of Things and system/device integration.</li>
+              <li class="en-only">Certifications in cybersecurity and system protection concepts.</li>
+              <li class="en-only">Programming and software development certifications.</li>
+              <li class="en-only">Credentials related to drones and their technologies.</li>
+            </ul>
+
+            <div class="badge-row">
+              <span class="badge ar-only">شهادات موثقة بالصور</span>
+              <span class="badge en-only">Certificates documented with images</span>
+            </div>
+
+            <div class="section-list">
+              <span class="ar-only">يمكن استعراض نماذج من الشهادات عبر الروابط المرفقة في النسخة الكاملة من الملف.</span>
+              <span class="en-only">Sample certificates can be viewed through the linked images in the full profile.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section class="section" id="projects">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-title-dot"></span>
+            <span class="ar-only">مشاريع مختارة</span>
+            <span class="en-only">Selected projects</span>
+          </div>
+          <div class="section-subtitle ar-only">
+            تطبيقات ويب تعكس أسلوب عمل تقني وواضح
+          </div>
+          <div class="section-subtitle en-only">
+            Web applications that reflect a clear, technical way of working
+          </div>
+        </div>
+
+        <div class="cards-row">
+          <article class="card">
+            <div class="card-title ar-only">متجر إلكتروني بتجربة استخدام سلسة</div>
+            <div class="card-title en-only">E‑commerce store with a smooth UX</div>
+
+            <p class="ar-only">
+              واجهة متجر إلكتروني مصممة بعناية لعرض المنتجات بشكل واضح، مع تجربة تصفح مريحة، وتركيز على
+              التفاصيل البصرية وسهولة الحركة بين الصفحات.
+            </p>
+            <p class="en-only">
+              An online store interface carefully designed to showcase products clearly, with a smooth browsing
+              experience and attention to visual details and navigation flow.
+            </p>
+
+            <a href="https://serene-hamster-a1075f.netlify.app/" target="_blank" rel="noopener" class="card-link">
+              Live Demo
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="card-title ar-only">تجارب أخرى في الواجهات والتكامل</div>
+            <div class="card-title en-only">Additional UI & integration work</div>
+
+            <p class="ar-only">
+              العمل على مشاريع أخرى في الواجهات الأمامية، صفحات تعريفية، ولوحات تحكم، مع مراعاة الأداء
+              والتوافق مع مختلف الأجهزة.
+            </p>
+            <p class="en-only">
+              Work on additional front‑end projects, landing pages, and dashboards, with a focus on performance
+              and cross‑device compatibility.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section class="section" id="services">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-title-dot"></span>
+            <span class="ar-only">خدمات يمكن تقديمها</span>
+            <span class="en-only">Services offered</span>
+          </div>
+          <div class="section-subtitle ar-only">
+            حلول عملية مبنية على خبرة تطوير وأمن وتقنيات حديثة
+          </div>
+          <div class="section-subtitle en-only">
+            Practical solutions built on development, security, and modern tech experience
+          </div>
+        </div>
+
+        <div class="services-grid">
+          <div class="service-card">
+            <span class="service-tag ar-only">تطوير واجهات</span>
+            <span class="service-tag en-only">Front‑end</span>
+
+            <div class="service-title ar-only">تطوير مواقع وصفحات تعريفية</div>
+            <div class="service-title en-only">Building websites & landing pages</div>
+
+            <p class="ar-only">
+              تصميم وتطوير واجهات ويب متجاوبة، سريعة، وواضحة، مع تجربة استخدام مريحة على مختلف الأجهزة.
+            </p>
+            <p class="en-only">
+              Designing and developing responsive, fast, and clear web interfaces with a smooth experience across
+              devices.
+            </p>
+          </div>
+
+          <div class="service-card">
+            <span class="service-tag ar-only">أمن سيبراني</span>
+            <span class="service-tag en-only">Cybersecurity</span>
+
+            <div class="service-title ar-only">مراجعة الجوانب الأمنية في الواجهات</div>
+            <div class="service-title en-only">Security‑aware front‑end review</div>
+
+            <p class="ar-only">
+              التركيز على تقليل المخاطر في الواجهات، وتحسين طريقة التعامل مع البيانات من منظور أمني.
+            </p>
+            <p class="en-only">
+              Focusing on reducing risks in front‑end implementations and improving how data is handled from a
+              security perspective.
+            </p>
+          </div>
+
+          <div class="service-card">
+            <span class="service-tag ar-only">تقنيات حديثة</span>
+            <span class="service-tag en-only">Modern tech</span>
+
+            <div class="service-title ar-only">دمج الذكاء الاصطناعي وإنترنت الأشياء</div>
+            <div class="service-title en-only">AI & IoT‑driven experiences</div>
+
+            <p class="ar-only">
+              التفكير في حلول تستفيد من الذكاء الاصطناعي وإنترنت الأشياء لتقديم تجربة مختلفة للمستخدم.
+            </p>
+            <p class="en-only">
+              Designing solutions that leverage AI and IoT to deliver a different, smarter experience to users.
+            </p>
+          </div>
+
+          <div class="service-card">
+            <span class="service-tag ar-only">تدريب</span>
+            <span class="service-tag en-only">Training</span>
+
+            <div class="service-title ar-only">تقديم دورات في برمجة الويب</div>
+            <div class="service-title en-only">Web programming training</div>
+
+            <p class="ar-only">
+              إعداد وتقديم محتوى تدريبي في أساسيات وتطبيقات برمجة الويب بأسلوب عملي وواضح.
+            </p>
+            <p class="en-only">
+              Preparing and delivering training content in web programming fundamentals and applications with a
+              practical, clear approach.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="section" id="contact">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-title-dot"></span>
+            <span class="ar-only">التواصل</span>
+            <span class="en-only">Contact</span>
+          </div>
+          <div class="section-subtitle ar-only">
+            قناة تواصل مباشرة للفرص والمشاريع القادمة
+          </div>
+          <div class="section-subtitle en-only">
+            A direct channel for upcoming opportunities and projects
+          </div>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-list">
+            <div class="contact-item">
+              <span class="contact-label ar-only">البريد:</span>
+              <span class="contact-label en-only">Email:</span>
+              <span class="contact-value">
+                <a href="mailto:ealg.Contact@gmail.com">ealg.Contact@gmail.com</a>
+              </span>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-label ar-only">الهاتف:</span>
+              <span class="contact-label en-only">Phone:</span>
+              <span class="contact-value">
+                <a href="tel:+96508922074">+96 508 922 074</a>
+              </span>
+            </div>
+
+            <div class="contact-item">
+              <span class="contact-label">Satr:</span>
+              <span class="contact-value">
+                <a href="https://profile.satr.codes/y50ib/public/overview" target="_blank" rel="noopener">
+                  profile.satr.codes/y50ib
+                </a>
+              </span>
+            </div>
+
+            <p class="contact-note ar-only">
+              يمكن مشاركة تفاصيل إضافية أو ملفات مرفقة عند التواصل، مثل نماذج من الشهادات أو المشاريع.
+            </p>
+            <p class="contact-note en-only">
+              Additional details or attachments—such as sample certificates or projects—can be shared upon
+              contact.
+            </p>
+          </div>
+
+          <div class="contact-cta">
+            <div class="contact-cta-title ar-only">جاهز للعمل على الفكرة التالية</div>
+            <div class="contact-cta-title en-only">Ready to work on the next idea</div>
+
+            <p class="contact-cta-text ar-only">
+              سواء كان المطلوب صفحة تعريفية، واجهة لمشروع جديد، أو تجربة تعتمد على تقنيات حديثة، يمكن
+              تحويل الفكرة إلى نموذج واضح قابل للتطوير والتوسع.
+            </p>
+            <p class="contact-cta-text en-only">
+              Whether it’s a landing page, a new product interface, or an experience powered by modern tech, the
+              goal is to turn ideas into clear, scalable implementations.
+            </p>
+
+            <div class="contact-cta-row">
+              <a href="mailto:ealg.Contact@gmail.com" class="btn-primary ar-only">ابدأ برسالة</a>
+              <a href="mailto:ealg.Contact@gmail.com" class="btn-primary en-only">Start with an email</a>
+
+              <a href="#projects" class="btn-ghost ar-only">استعراض الأعمال أولاً</a>
+              <a href="#projects" class="btn-ghost en-only">Review work first</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <footer>
-        <p>&copy; 2026 عماد الغامدي. جميع الحقوق محفوظة.</p>
+      <span class="ar-only">تصميم يعكس شخصية تقنية واثقة، مع قابلية للتطوير والتعديل.</span>
+      <span class="en-only">A design that reflects a confident technical profile, ready to grow and evolve.</span>
+
+      <span class="ar-only">يمكن تعديل الألوان والنمط بسهولة عبر متغيرات CSS في أعلى الملف.</span>
+      <span class="en-only">Colors and style can be easily adjusted via the CSS variables at the top of the file.</span>
     </footer>
-</div>
+  </div>
 
-<script>
-    // يمكنك إضافة أي تفاعل مستقبلي هنا
-    console.log("Welcome to my portfolio!");
-</script>
+  <script>
+    (function () {
+      const root = document.documentElement;
+      const langButtons = document.querySelectorAll(".lang-btn");
 
+      langButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const lang = btn.getAttribute("data-switch");
+          document.body.setAttribute("data-lang", lang);
+
+          langButtons.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
