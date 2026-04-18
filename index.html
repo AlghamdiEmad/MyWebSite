@@ -8,9 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo+Play:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <style>
-* {
-    box-sizing: border-box; /* 🔥 هذا أهم إصلاح */
-}
+* { box-sizing: border-box; }
 
 body {
     font-family: "Cairo Play", sans-serif;
@@ -54,7 +52,16 @@ header {
     white-space: pre-wrap;
 }
 
-/* زر + */
+.delete-btn {
+    margin-top: 10px;
+    background: #ff4444;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
 .fab {
     position: fixed;
     bottom: 24px;
@@ -69,7 +76,6 @@ header {
     border: none;
 }
 
-/* المودال */
 .modal {
     position: fixed;
     bottom: 0;
@@ -103,7 +109,6 @@ textarea {
     color: #fff;
     font-size: 17px;
     resize: none;
-    outline: none;
 }
 
 .send-btn {
@@ -117,7 +122,6 @@ textarea {
     font-weight: bold;
 }
 
-/* أنيميشن */
 @keyframes fadeIn {
     from {opacity:0; transform:translateY(10px);}
     to {opacity:1; transform:translateY(0);}
@@ -154,6 +158,9 @@ const SUPABASE_URL = 'https://yiwgqohertsftgnpcqoh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Q2n4xAgOpIbcXjiuzTToJg_vtpAkBHX';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+/* 📌 نخزن بوستات المستخدم */
+let myPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
+
 function openModal() {
     document.getElementById("modal").style.display = "flex";
 }
@@ -162,12 +169,12 @@ function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
 
-document.getElementById("modal").addEventListener("click", function(e) {
-    if (e.target === this) closeModal();
+document.getElementById("modal").addEventListener("click", e => {
+    if (e.target === e.currentTarget) closeModal();
 });
 
 /* Enter ينشر */
-document.getElementById("postInput").addEventListener("keydown", function(e) {
+document.getElementById("postInput").addEventListener("keydown", e => {
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         sendPost();
@@ -193,6 +200,7 @@ function timeAgo(date) {
     return "الآن";
 }
 
+/* جلب البوستات */
 async function getPosts() {
     const { data } = await _supabase
         .from('posts')
@@ -214,23 +222,46 @@ async function getPosts() {
 
         const el = document.createElement("div");
         el.className = "post";
+
         el.innerHTML = `
             <div class="post-time">${timeAgo(post.created_at)}</div>
             <div class="post-content">${post.content}</div>
+            ${myPosts.includes(post.id) ? `<button class="delete-btn" onclick="deletePost('${post.id}')">🗑 حذف</button>` : ""}
         `;
+
         feed.appendChild(el);
     });
 }
 
+/* نشر */
 async function sendPost() {
     const content = document.getElementById("postInput").value;
 
     if (!content.trim()) return alert("اكتب شي أول!");
 
-    await _supabase.from('posts').insert([{ content }]);
+    const { data } = await _supabase
+        .from('posts')
+        .insert([{ content }])
+        .select();
+
+    /* نحفظ ID */
+    myPosts.push(data[0].id);
+    localStorage.setItem("myPosts", JSON.stringify(myPosts));
 
     document.getElementById("postInput").value = "";
     closeModal();
+    getPosts();
+}
+
+/* حذف */
+async function deletePost(id) {
+    if (!confirm("متأكد؟")) return;
+
+    await _supabase.from('posts').delete().eq('id', id);
+
+    myPosts = myPosts.filter(p => p !== id);
+    localStorage.setItem("myPosts", JSON.stringify(myPosts));
+
     getPosts();
 }
 
