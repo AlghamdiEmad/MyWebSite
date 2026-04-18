@@ -4,37 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Najd | نـجـد</title>
+
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #000; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { width: 100%; max-width: 500px; }
-        h1 { font-size: 24px; margin-bottom: 20px; color: #1DB954; text-align: center; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
 
-        .post-box { background: #121212; border: 1px solid #333; padding: 15px; border-radius: 15px; margin-bottom: 20px; }
-        textarea { width: 100%; height: 80px; background: transparent; color: #fff; border: none; outline: none; resize: none; font-size: 16px; }
-        button { background: #fff; color: #000; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; float: left; }
-        button:hover { background: #ddd; }
+        /* العنوان */
+        header {
+            text-align: center;
+            padding: 25px 0;
+            font-size: 26px;
+            font-weight: bold;
+            color: #1DB954;
+            border-bottom: 1px solid #222;
+        }
 
-        .feed { width: 100%; }
-        .post { background: #121212; border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 15px; animation: slideIn 0.3s ease; }
-        .post-time { font-size: 12px; color: #666; margin-bottom: 8px; }
-        .post-content { font-size: 16px; line-height: 1.4; word-wrap: break-word; }
+        /* الحاوية */
+        .container {
+            width: 100%;
+            max-width: 550px;
+            margin: auto;
+            padding: 20px;
+        }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* المنشورات */
+        .post {
+            background: #111;
+            border: 1px solid #222;
+            padding: 18px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            transition: 0.2s;
+        }
+
+        .post:hover {
+            background: #151515;
+            transform: translateY(-2px);
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            font-size: 17px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* زر النشر العائم */
+        .fab {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: #1DB954;
+            color: #000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 32px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 15px #1db95480;
+            transition: 0.2s;
+        }
+
+        .fab:hover {
+            background: #17a446;
+        }
+
+        /* نافذة الكتابة */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000000cc;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-box {
+            background: #111;
+            width: 90%;
+            max-width: 450px;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #222;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 12px;
+            color: #fff;
+            font-size: 16px;
+            resize: none;
+        }
+
+        .send-btn {
+            margin-top: 12px;
+            width: 100%;
+            padding: 12px;
+            background: #1DB954;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .send-btn:hover {
+            background: #17a446;
+        }
     </style>
 </head>
+
 <body>
 
+    <header>Najd | نـجـد</header>
+
     <div class="container">
-        <h1>قول الي بخاطرك 🚀<br> بس احترم الآداب العامة</h1>
-
-        <div class="post-box">
-            <textarea id="postInput" placeholder="وش قاعد يدور في بالك؟"></textarea>
-            <button onclick="sendPost()">نشر...</button>
-            <div style="clear: both;"></div>
+        <div id="feed">
+            <p style="text-align:center;color:#666;">جاري تحميل المحتوى...</p>
         </div>
+    </div>
 
-        <div id="feed" class="feed">
-            <p style="text-align: center; color: #666;">جاري تحميل المحتوى...</p>
+    <!-- زر النشر العائم -->
+    <button class="fab" onclick="openModal()">+</button>
+
+    <!-- نافذة الكتابة -->
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <textarea id="postInput" placeholder="اكتب الي بخاطرك..."></textarea>
+            <button class="send-btn" onclick="sendPost()">نشر</button>
         </div>
     </div>
 
@@ -45,46 +159,48 @@
         const SUPABASE_KEY = 'sb_publishable_Q2n4xAgOpIbcXjiuzTToJg_vtpAkBHX';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        function openModal() {
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
         // جلب المنشورات (الأقدم فوق + حذف اللي تعدت 24 ساعة)
         async function getPosts() {
             const { data, error } = await _supabase
                 .from('posts')
                 .select('*')
-                .order('created_at', { ascending: true }); // الأقدم → الأحدث
+                .order('created_at', { ascending: true });
 
-            if (error) {
-                console.error('خطأ في التحميل:', error);
-                return;
-            }
+            if (error) return console.error(error);
 
             const now = Date.now();
-            const feedDiv = document.getElementById('feed');
-            feedDiv.innerHTML = '';
+            const feed = document.getElementById("feed");
+            feed.innerHTML = "";
 
             data.forEach(async post => {
                 const postTime = new Date(post.created_at).getTime();
                 const hoursPassed = (now - postTime) / (1000 * 60 * 60);
 
-                // حذف المنشور إذا تعدى 24 ساعة
                 if (hoursPassed >= 24) {
                     await _supabase.from('posts').delete().eq('id', post.id);
                     return;
                 }
 
-                // عرض المنشور
-                const postElement = document.createElement('div');
-                postElement.className = 'post';
-                postElement.innerHTML = `
+                const el = document.createElement("div");
+                el.className = "post";
+                el.innerHTML = `
                     <div class="post-time">${new Date(post.created_at).toLocaleString('ar-SA')}</div>
                     <div class="post-content">${post.content}</div>
                 `;
-                feedDiv.appendChild(postElement);
+                feed.appendChild(el);
             });
         }
 
-        // نشر منشور جديد
         async function sendPost() {
-            const content = document.getElementById('postInput').value;
+            const content = document.getElementById("postInput").value;
 
             if (!content.trim()) {
                 alert("اكتب شي أول!");
@@ -93,18 +209,20 @@
 
             const { error } = await _supabase
                 .from('posts')
-                .insert([{ content: content }]);
+                .insert([{ content }]);
 
             if (error) {
-                alert("مشكلة في النشر، تأكد من إعدادات الجدول");
-                console.error(error);
-            } else {
-                document.getElementById('postInput').value = '';
-                getPosts();
+                alert("خطأ في النشر");
+                return;
             }
+
+            document.getElementById("postInput").value = "";
+            closeModal();
+            getPosts();
         }
 
         getPosts();
     </script>
+
 </body>
 </html>
