@@ -3,39 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>فضفضة نيون</title>
+<title>تعليقات نيون</title>
 
 <style>
     body {
         margin: 0;
-        padding: 20px;
+        padding: 0;
         background: #000;
         color: #0f0;
         font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* زر + */
+    .add-btn {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 55px;
+        height: 55px;
+        background: #0f0;
+        color: #000;
+        border-radius: 50%;
+        font-size: 32px;
+        font-weight: bold;
         display: flex;
+        align-items: center;
         justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 0 15px #0f0;
+        transition: 0.2s;
+        z-index: 10;
     }
 
-    .container {
-        width: 100%;
-        max-width: 550px;
-    }
-
-    h1 {
-        text-align: center;
-        font-size: 28px;
-        margin-bottom: 25px;
-        text-shadow: 0 0 10px #0f0;
+    .add-btn:hover {
+        background: #8f8;
     }
 
     /* صندوق الكتابة */
-    .post-box {
+    .input-box {
+        position: fixed;
+        bottom: 90px;
+        left: 20px;
+        right: 20px;
         background: #050505;
         border: 1px solid #0f0;
         padding: 15px;
         border-radius: 12px;
-        margin-bottom: 20px;
-        box-shadow: 0 0 10px #0f0;
+        display: none;
+        box-shadow: 0 0 15px #0f0;
     }
 
     textarea {
@@ -50,15 +65,10 @@
     }
 
     .counter {
-        text-align: left;
         font-size: 12px;
         color: #8f8;
         margin-top: 5px;
-    }
-
-    input[type="file"] {
-        margin-top: 10px;
-        color: #0f0;
+        text-align: left;
     }
 
     button {
@@ -76,7 +86,12 @@
         background: #8f8;
     }
 
-    /* المنشورات */
+    /* التعليقات */
+    .feed {
+        padding: 20px;
+        margin-bottom: 120px;
+    }
+
     .post {
         background: #050505;
         border: 1px solid #0f0;
@@ -94,30 +109,6 @@
 
     .post-content {
         font-size: 17px;
-        margin-bottom: 10px;
-    }
-
-    .images-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        gap: 8px;
-        margin-top: 10px;
-    }
-
-    .images-grid img {
-        width: 100%;
-        border-radius: 8px;
-        border: 1px solid #0f0;
-    }
-
-    .delete-btn {
-        margin-top: 10px;
-        background: #f00;
-        color: #fff;
-        padding: 6px 12px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 12px;
     }
 
     @keyframes fadeIn {
@@ -128,41 +119,34 @@
 </head>
 
 <body>
-<div class="container">
 
-    <h1>فضفضة نيون 💬</h1>
-
-    <div class="post-box">
-        <textarea id="postInput" maxlength="60" placeholder="وش بخاطرك؟ (حد 60 حرف)"></textarea>
-        <div class="counter" id="counter">0 / 60</div>
-
-        <input type="file" id="imageInput" multiple accept="image/*">
-
-        <button onclick="sendPost()">نشر</button>
-    </div>
-
-    <div id="feed"></div>
-
+<div class="feed" id="feed">
+    <p style="text-align:center; color:#555;">جاري تحميل التعليقات...</p>
 </div>
+
+<!-- صندوق الكتابة -->
+<div class="input-box" id="inputBox">
+    <textarea id="postInput" maxlength="60" placeholder="اكتب تعليقك (حد 60 حرف)"></textarea>
+    <div class="counter" id="counter">0 / 60</div>
+    <button onclick="sendPost()">نشر</button>
+</div>
+
+<!-- زر + -->
+<div class="add-btn" onclick="toggleInput()">+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* إعداد Supabase */
+/* Supabase */
 const SUPABASE_URL = "https://yiwgqohertsftgnpcqoh.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Q2n4xAgOpIbcXjiuzTToJg_vtpAkBHX";
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let currentUser = null;
-
-/* تسجيل دخول مجهول */
-async function initAuth() {
-    const { data, error } = await _supabase.auth.signInAnonymously();
-    if (error) console.error(error);
-    currentUser = data.user;
-    getPosts();
+/* فتح/إغلاق صندوق الكتابة */
+function toggleInput() {
+    const box = document.getElementById("inputBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
 }
-initAuth();
 
 /* عداد الحروف */
 document.getElementById("postInput").addEventListener("input", () => {
@@ -170,60 +154,29 @@ document.getElementById("postInput").addEventListener("input", () => {
     document.getElementById("counter").textContent = `${len} / 60`;
 });
 
-/* رفع الصور */
-async function uploadImages(files) {
-    const urls = [];
-
-    for (let file of files) {
-        const fileName = `${Date.now()}-${file.name}`;
-        const { error } = await _supabase.storage
-            .from("post-images")
-            .upload(fileName, file);
-
-        if (!error) {
-            const { data } = _supabase.storage
-                .from("post-images")
-                .getPublicUrl(fileName);
-
-            urls.push(data.publicUrl);
-        }
-    }
-
-    return urls;
-}
-
-/* نشر منشور */
+/* نشر تعليق */
 async function sendPost() {
     const content = document.getElementById("postInput").value.trim();
-    const files = document.getElementById("imageInput").files;
 
-    if (!content && files.length === 0) {
-        alert("اكتب شي أو ارفع صورة!");
+    if (!content) {
+        alert("اكتب تعليق أول");
         return;
     }
 
-    const imageUrls = await uploadImages(files);
-
-    const { error } = await _supabase.from("posts").insert([
-        {
-            content,
-            images: imageUrls,
-            user_id: currentUser.id
-        }
-    ]);
+    const { error } = await _supabase.from("posts").insert([{ content }]);
 
     if (error) {
         alert("خطأ في النشر");
         console.error(error);
     } else {
         document.getElementById("postInput").value = "";
-        document.getElementById("imageInput").value = "";
         document.getElementById("counter").textContent = "0 / 60";
+        toggleInput();
         getPosts();
     }
 }
 
-/* جلب المنشورات */
+/* جلب التعليقات */
 async function getPosts() {
     const { data, error } = await _supabase
         .from("posts")
@@ -241,40 +194,14 @@ async function getPosts() {
 
         div.innerHTML = `
             <div class="post-time">${new Date(post.created_at).toLocaleString("ar-SA")}</div>
-            <div class="post-content">${post.content || ""}</div>
+            <div class="post-content">${post.content}</div>
         `;
-
-        if (post.images && post.images.length > 0) {
-            const grid = document.createElement("div");
-            grid.className = "images-grid";
-
-            post.images.forEach(url => {
-                const img = document.createElement("img");
-                img.src = url;
-                grid.appendChild(img);
-            });
-
-            div.appendChild(grid);
-        }
-
-        if (post.user_id === currentUser.id) {
-            const del = document.createElement("button");
-            del.className = "delete-btn";
-            del.textContent = "حذف";
-            del.onclick = () => deletePost(post.id);
-            div.appendChild(del);
-        }
 
         feed.appendChild(div);
     });
 }
 
-/* حذف منشور */
-async function deletePost(id) {
-    const { error } = await _supabase.from("posts").delete().eq("id", id);
-    if (error) console.error(error);
-    getPosts();
-}
+getPosts();
 </script>
 
 </body>
