@@ -19,7 +19,7 @@ body {
 
 header {
     text-align: center;
-    padding: 25px 0;
+    padding: 25px;
     font-size: 28px;
     font-weight: 700;
     border-bottom: 1px solid #222;
@@ -37,29 +37,42 @@ header {
     padding: 18px;
     border-radius: 14px;
     margin-bottom: 18px;
-    animation: fadeIn 0.3s ease;
 }
 
-.post-time {
-    font-size: 13px;
-    color: #888;
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 10px;
 }
 
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.post-time {
+    font-size: 12px;
+    color: #888;
+}
+
 .post-content {
-    font-size: 18px;
-    line-height: 1.7;
-    white-space: pre-wrap;
+    font-size: 17px;
+    margin-top: 8px;
 }
 
 .delete-btn {
     margin-top: 10px;
-    background: #ff4444;
+    background: red;
     border: none;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 8px;
-    color: white;
-    cursor: pointer;
+    color: #fff;
 }
 
 .fab {
@@ -68,35 +81,28 @@ header {
     left: 50%;
     transform: translateX(-50%);
     background: #1DB954;
-    color: #000;
     width: 65px;
     height: 65px;
     border-radius: 50%;
-    font-size: 34px;
-    border: none;
+    font-size: 30px;
 }
 
 .modal {
     position: fixed;
     bottom: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     background: #000000cc;
     display: none;
     justify-content: flex-end;
-    align-items: flex-end;
 }
 
 .modal-box {
     width: 100%;
     max-width: 550px;
-    margin: auto;
     background: #111;
     padding: 20px;
     border-radius: 20px 20px 0 0;
-    border: 1px solid #222;
-    animation: slideUp 0.3s ease;
 }
 
 textarea {
@@ -104,32 +110,18 @@ textarea {
     height: 120px;
     background: #000;
     border: 1px solid #333;
-    border-radius: 12px;
-    padding: 12px;
+    border-radius: 10px;
     color: #fff;
-    font-size: 17px;
-    resize: none;
+    padding: 10px;
 }
 
 .send-btn {
-    margin-top: 12px;
+    margin-top: 10px;
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     background: #1DB954;
     border: none;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-@keyframes fadeIn {
-    from {opacity:0; transform:translateY(10px);}
-    to {opacity:1; transform:translateY(0);}
-}
-
-@keyframes slideUp {
-    from {transform:translateY(100%);}
-    to {transform:translateY(0);}
+    border-radius: 10px;
 }
 </style>
 </head>
@@ -146,7 +138,7 @@ textarea {
 
 <div class="modal" id="modal">
     <div class="modal-box">
-        <textarea id="postInput" placeholder="اكتب الي بخاطرك..."></textarea>
+        <textarea id="postInput" placeholder="اكتب..."></textarea>
         <button class="send-btn" onclick="sendPost()">نشر</button>
     </div>
 </div>
@@ -158,7 +150,20 @@ const SUPABASE_URL = 'https://yiwgqohertsftgnpcqoh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Q2n4xAgOpIbcXjiuzTToJg_vtpAkBHX';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* 📌 نخزن بوستات المستخدم */
+/* 🔥 user setup مرة وحدة */
+let username = localStorage.getItem("username");
+let userColor = localStorage.getItem("userColor");
+
+if (!username) {
+    username = prompt("اكتب اسم المستخدم:");
+    localStorage.setItem("username", username);
+
+    const colors = ["#ff4d4d","#4da6ff","#4dff88","#ffd24d","#b84dff"];
+    userColor = colors[Math.floor(Math.random()*colors.length)];
+    localStorage.setItem("userColor", userColor);
+}
+
+/* بوستاتي */
 let myPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
 
 function openModal() {
@@ -169,29 +174,10 @@ function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
 
-document.getElementById("modal").addEventListener("click", e => {
-    if (e.target === e.currentTarget) closeModal();
-});
-
-/* Enter ينشر */
-document.getElementById("postInput").addEventListener("keydown", e => {
-    if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendPost();
-    }
-});
-
-/* الوقت */
+/* وقت */
 function timeAgo(date) {
     const seconds = Math.floor((Date.now() - new Date(date)) / 1000);
-
-    const intervals = {
-        سنة: 31536000,
-        شهر: 2592000,
-        يوم: 86400,
-        ساعة: 3600,
-        دقيقة: 60
-    };
+    const intervals = { ساعة:3600, دقيقة:60 };
 
     for (let key in intervals) {
         const value = Math.floor(seconds / intervals[key]);
@@ -200,33 +186,29 @@ function timeAgo(date) {
     return "الآن";
 }
 
-/* جلب البوستات */
+/* جلب */
 async function getPosts() {
-    const { data } = await _supabase
-        .from('posts')
-        .select('*')
-        .order('created_at', { ascending: true });
+    const { data } = await _supabase.from('posts').select('*').order('created_at');
 
-    const now = Date.now();
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
-    data.forEach(async post => {
-        const postTime = new Date(post.created_at).getTime();
-        const hoursPassed = (now - postTime) / (1000 * 60 * 60);
-
-        if (hoursPassed >= 24) {
-            await _supabase.from('posts').delete().eq('id', post.id);
-            return;
-        }
-
+    data.forEach(post => {
         const el = document.createElement("div");
         el.className = "post";
 
         el.innerHTML = `
-            <div class="post-time">${timeAgo(post.created_at)}</div>
+            <div class="post-header">
+                <div class="avatar" style="background:${post.color}"></div>
+                <div>
+                    <div class="username">${post.author}</div>
+                    <div class="post-time">${timeAgo(post.created_at)}</div>
+                </div>
+            </div>
+
             <div class="post-content">${post.content}</div>
-            ${myPosts.includes(post.id) ? `<button class="delete-btn" onclick="deletePost('${post.id}')">🗑 حذف</button>` : ""}
+
+            ${myPosts.includes(post.id) ? `<button class="delete-btn" onclick="deletePost('${post.id}')">حذف</button>` : ""}
         `;
 
         feed.appendChild(el);
@@ -236,15 +218,13 @@ async function getPosts() {
 /* نشر */
 async function sendPost() {
     const content = document.getElementById("postInput").value;
-
-    if (!content.trim()) return alert("اكتب شي أول!");
+    if (!content.trim()) return;
 
     const { data } = await _supabase
         .from('posts')
-        .insert([{ content }])
+        .insert([{ content, author: username, color: userColor }])
         .select();
 
-    /* نحفظ ID */
     myPosts.push(data[0].id);
     localStorage.setItem("myPosts", JSON.stringify(myPosts));
 
@@ -255,8 +235,6 @@ async function sendPost() {
 
 /* حذف */
 async function deletePost(id) {
-    if (!confirm("متأكد؟")) return;
-
     await _supabase.from('posts').delete().eq('id', id);
 
     myPosts = myPosts.filter(p => p !== id);
