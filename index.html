@@ -3,10 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Najd Threads</title>
-
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Najd | نـجـد</title>
 
 <style>
     body {
@@ -15,37 +12,30 @@
         background: #000;
         color: #fff;
         font-family: system-ui, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
 
-    .container {
-        max-width: 600px;
-        margin: auto;
-        padding: 20px;
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 25px;
-        font-weight: 600;
-    }
-
-    .input-box {
+    .box {
+        width: 90%;
+        max-width: 400px;
         background: #111;
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 20px;
+        padding: 25px;
+        border-radius: 15px;
         border: 1px solid #222;
     }
 
-    input, textarea {
+    input {
         width: 100%;
         padding: 12px;
-        margin-top: 8px;
+        margin-top: 10px;
         border-radius: 10px;
         border: none;
         background: #1a1a1a;
         color: #fff;
-        font-size: 15px;
+        font-size: 16px;
     }
 
     button {
@@ -55,142 +45,48 @@
         color: #000;
         border: none;
         border-radius: 10px;
-        font-size: 16px;
+        font-size: 17px;
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 20px;
         cursor: pointer;
     }
 
-    .post {
-        background: #111;
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 15px;
-        border: 1px solid #222;
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-    }
-
-    .avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
-
-    .post-content {
-        flex: 1;
-    }
-
-    .author {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .time {
-        opacity: 0.5;
-        font-size: 13px;
-        margin-top: 5px;
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
     }
 </style>
 </head>
 
 <body>
-<div class="container">
 
-    <h2>Najd Threads</h2>
+<div class="box">
+    <h2>Najd | نـجـد</h2>
 
-    <div class="input-box">
-        <label>اسم المستخدم:</label>
-        <input id="authorInput" type="text" placeholder="اكتب اسمك هنا">
+    <label>اسم المستخدم:</label>
+    <input id="username" type="text" placeholder="اكتب اسمك">
 
-        <label style="margin-top:15px;">اختر لون الدائرة:</label>
-        <input id="colorInput" type="color" value="#ff6b00">
+    <label style="margin-top:15px;">اختر لون الصورة الشخصية:</label>
+    <input id="usercolor" type="color" value="#ff6b00">
 
-        <label style="margin-top:15px;">المحتوى:</label>
-        <textarea id="contentInput" rows="3" placeholder="اكتب منشورك..."></textarea>
-
-        <button onclick="addPost()">نشر</button>
-    </div>
-
-    <div id="posts"></div>
-
+    <button onclick="saveData()">Save</button>
 </div>
 
 <script>
-const supabase = supabase.createClient(
-    "https://yiwgqohertsftgnpcqoh.supabase.co",
-    "sb_publishable_Q2n4xAgOpIbcXjiuzTToJg_vtpAkBHX"
-);
+function saveData() {
+    const name = document.getElementById("username").value.trim();
+    const color = document.getElementById("usercolor").value;
 
-// إضافة منشور
-async function addPost() {
-    const author = document.getElementById("authorInput").value.trim();
-    const color = document.getElementById("colorInput").value;
-    const content = document.getElementById("contentInput").value.trim();
-
-    if (!author || !content) {
-        alert("الرجاء كتابة الاسم والمحتوى");
+    if (!name) {
+        alert("الرجاء كتابة اسم المستخدم");
         return;
     }
 
-    await supabase.from("posts").insert([
-        { author, color, content }
-    ]);
+    localStorage.setItem("najd_name", name);
+    localStorage.setItem("najd_color", color);
 
-    document.getElementById("contentInput").value = "";
+    window.location.href = "timeline.html";
 }
-
-// تحميل المنشورات
-async function loadPosts() {
-    const { data } = await supabase
-        .from("posts")
-        .select("*")
-        .order("created_at", { ascending: true });
-
-    displayPosts(data);
-}
-
-// عرض المنشورات
-function displayPosts(posts) {
-    const container = document.getElementById("posts");
-    container.innerHTML = "";
-
-    const now = Date.now();
-
-    posts.forEach(post => {
-        const postTime = new Date(post.created_at).getTime();
-        const diff = now - postTime;
-
-        // حذف المنشورات بعد 24 ساعة
-        if (diff > 24 * 60 * 60 * 1000) {
-            supabase.from("posts").delete().eq("id", post.id);
-            return;
-        }
-
-        const div = document.createElement("div");
-        div.className = "post";
-
-        div.innerHTML = `
-            <div class="avatar" style="background:${post.color || '#ff6b00'}"></div>
-            <div class="post-content">
-                <div class="author">${post.author || "مستخدم"}</div>
-                <div>${post.content}</div>
-                <div class="time">${new Date(post.created_at).toLocaleString()}</div>
-            </div>
-        `;
-
-        container.appendChild(div);
-    });
-}
-
-// Realtime
-supabase.channel("realtime:posts")
-    .on("postgres_changes", { event: "*", schema: "public", table: "posts" }, loadPosts)
-    .subscribe();
-
-loadPosts();
 </script>
 
 </body>
