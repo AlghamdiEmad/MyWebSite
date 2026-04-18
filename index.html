@@ -1,41 +1,189 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>متجري الصغير</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>المتجر الإلكتروني - الرئيسية</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    header {
+      background: #111827;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header .logo {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    nav a {
+      color: #e5e7eb;
+      text-decoration: none;
+      margin-left: 1rem;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #111827, #1f2937);
+      color: #fff;
+      padding: 2.5rem 2rem;
+      border-radius: 1rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 1rem;
+      font-size: 2rem;
+    }
+
+    .hero p {
+      margin: 0 0 1.5rem;
+      font-size: 1rem;
+      color: #e5e7eb;
+    }
+
+    .hero a {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #f97316;
+      color: #111827;
+      text-decoration: none;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .hero a:hover {
+      background: #fb923c;
+    }
+
+    .features {
+      margin-top: 2.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature {
+      background: #ffffff;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .feature p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .cart-indicator {
+      background: #f97316;
+      color: #111827;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      nav a {
+        margin-left: 0.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>متجري الإلكتروني</h1>
-    </header>
+  <header>
+    <div class="logo">متجر O الإلكتروني</div>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="cart.html">
+        <span class="cart-indicator" id="cartCount">0</span>
+        السلة
+      </a>
+    </nav>
+  </header>
 
-    <main>
-        <section id="products-list">
-            <h2>المنتجات</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <h3>سماعات لاسلكية</h3>
-                    <p>السعر: 150 ريال</p>
-                    <button onclick="addToCart('سماعات لاسلكية', 150)">إضافة للسلة</button>
-                </div>
-                <div class="product-card">
-                    <h3>ساعة ذكية</h3>
-                    <p>السعر: 300 ريال</p>
-                    <button onclick="addToCart('ساعة ذكية', 300)">إضافة للسلة</button>
-                </div>
-            </div>
-        </section>
+  <main>
+    <section class="hero">
+      <h1>مرحباً بك في متجر O</h1>
+      <p>متجر بسيط لعرض المنتجات وإضافتها إلى السلة باستخدام HTML + CSS + JavaScript فقط.</p>
+      <a href="products.html">تصفح المنتجات</a>
+    </section>
 
-        <section id="cart-section">
-            <h2>سلة المشتريات</h2>
-            <ul id="cart-items">
-                </ul>
-            <p>الإجمالي: <span id="total-price">0</span> ريال</p>
-            <button id="checkout-btn" onclick="checkout()">إتمام الشراء</button>
-        </section>
-    </main>
+    <section class="features">
+      <div class="feature">
+        <h3>تجربة بسيطة</h3>
+        <p>واجهة نظيفة وسهلة الاستخدام بدون أي تعقيد.</p>
+      </div>
+      <div class="feature">
+        <h3>سلة مشتريات</h3>
+        <p>إضافة المنتجات إلى السلة وتحديث العدد مباشرة من المتصفح.</p>
+      </div>
+      <div class="feature">
+        <h3>قابلة للتطوير</h3>
+        <p>تقدر تضيف منتجات وصفحات جديدة بسهولة وتعدل على التصميم.</p>
+      </div>
+    </section>
+  </main>
 
-    <script src="script.js"></script>
+  <footer>
+    &copy; <span id="year"></span> متجر O الإلكتروني
+  </footer>
+
+  <script>
+    // تحديث سنة الفوتر
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // قراءة عدد العناصر في السلة من localStorage
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      document.getElementById("cartCount").textContent = cart.length;
+    }
+
+    updateCartCount();
+  </script>
 </body>
 </html>
