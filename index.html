@@ -24,7 +24,7 @@ body.light {
     color: #000;
 }
 
-/* شاشة السياسة */
+/* 🛑 شاشة السياسة */
 #policyOverlay {
     position: fixed;
     top: 0;
@@ -50,16 +50,13 @@ body.light {
 }
 
 .policy-box h2 { color: #1DB954; margin-bottom: 20px; }
-
 .policy-content { text-align: right; line-height: 1.8; margin-bottom: 25px; }
-
 .policy-btns { display: flex; gap: 10px; }
 
 .btn-agree { flex: 2; background: #1DB954; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
 .btn-reject { flex: 1; background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; }
 
-/* المحتوى الأساسي */
+/* 📱 المحتوى الأساسي */
 #mainApp { display: none; }
 
 header {
@@ -77,7 +74,19 @@ header {
 
 body.light header { background: #f5f5f5; }
 
-.settings-btn { font-size: 22px; cursor: pointer; }
+/* ⚙️ تنسيق أيقونة الإعدادات الجديدة */
+.settings-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.settings-btn:hover { opacity: 0.8; }
+.settings-btn:active { transform: scale(0.9); background: rgba(29, 185, 84, 0.1); }
 
 .container { max-width: 550px; margin: auto; padding: 20px; }
 
@@ -120,6 +129,7 @@ body.light .post { background: #fff; border: 1px solid #ddd; }
     border: none;
     color: white;
     cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 .modal {
@@ -193,7 +203,11 @@ body.light textarea, body.light input, body.light select {
 <div id="mainApp">
     <header>
         <span>Najd | نـجـد</span>
-        <span class="settings-btn" onclick="openSettings()">⚙️</span>
+        <span class="settings-btn" onclick="openSettings()">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/>
+            </svg>
+        </span>
     </header>
 
     <div class="container">
@@ -230,13 +244,11 @@ const SUPABASE_URL = 'https://yiwgqohertsftgnpcqoh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Q2n4xAgOpIbcXjiuzTToJg_vtpAkBHX';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* بيانات المستخدم */
 let username = localStorage.getItem("username") || "مستخدم";
 let userColor = localStorage.getItem("userColor") || "#4da6ff";
 let theme = localStorage.getItem("theme") || "dark";
 let myPosts = JSON.parse(localStorage.getItem("myPosts") || "[]");
 
-/* منطق السياسة */
 function acceptPolicy() {
     localStorage.setItem("policyAccepted", "true");
     document.getElementById("policyOverlay").style.display = "none";
@@ -257,27 +269,23 @@ window.onload = () => {
     }
 };
 
-/* جلب المنشورات */
 async function getPosts() {
     const { data } = await _supabase.from('posts').select('*').order('created_at', { ascending: false });
     const feed = document.getElementById("feed");
     feed.innerHTML = "";
 
-    // 🌟 --- المنشور الترحيبي اليدوي ---
+    // المنشور الترحيبي اليدوي
     const welcomePost = {
         id: 'welcome_msg',
-        author: 'إدارة نجد 🛡️', // <-- غير
-        color: '#002766',       // <-- غير لون الصورة هنا
-        content: 'نورت نجد يا بطل! 🌟 الموقع موقعك، تقدر تغير اسمك من الإعدادات، وتختار اللون اللي يمثلك، وحتى تغير شكل الموقع على كيفك. خذ راحتك وانشر اللي بخاطرك!', // <-- غير النص هنا
+        author: 'إدارة نجد 🛡️', 
+        color: '#1DB954',       
+        content: 'نورت نجد يا بطل! 🌟 الموقع موقعك، تقدر تغير اسمك من الأيقونة الجديدة فوق، وتختار اللون اللي يمثلك، وحتى شكل الموقع. خذ راحتك!',
         created_at: new Date().toISOString()
     };
     displaySinglePost(welcomePost, true);
-    // 🌟 --------------------------
 
     if(data) {
-        data.forEach(post => {
-            displaySinglePost(post, false);
-        });
+        data.forEach(post => displaySinglePost(post, false));
     }
 }
 
@@ -299,7 +307,6 @@ function displaySinglePost(post, isWelcome) {
     feed.appendChild(el);
 }
 
-/* باقي الدوال المساعدة */
 function openModal() { document.getElementById("modal").style.display = "flex"; }
 function openSettings() {
     document.getElementById("settingsModal").style.display = "flex";
@@ -325,8 +332,7 @@ function timeAgo(date) {
     if (seconds < 60) return "الآن";
     const mins = Math.floor(seconds/60);
     if (mins < 60) return `قبل ${mins} دقيقة`;
-    const hours = Math.floor(mins/60);
-    return `قبل ${hours} ساعة`;
+    return `قبل ${Math.floor(mins/60)} ساعة`;
 }
 
 async function sendPost() {
